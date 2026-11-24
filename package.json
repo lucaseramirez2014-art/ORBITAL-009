@@ -1,0 +1,46 @@
+{
+  "name": "cobalix-orbital",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cobalix Orbital — Local-first AI-assisted cybersecurity and file intelligence platform",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cobalix/orbital.git"
+  },
+  "homepage": "https://github.com/cobalix/orbital",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/companion",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:companion": "npm run dev --workspace=apps/companion",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=packages/core && npm run build --workspace=packages/db && npm run build --workspace=packages/scanners && npm run build --workspace=packages/ai && npm run build --workspace=packages/agents && npm run build --workspace=apps/companion && npm run build --workspace=apps/web",
+    "build:companion:bundle": "node scripts/bundle-companion.mjs",
+    "stage:node-runtime": "node scripts/stage-node-runtime.mjs",
+    "build:desktop": "npm run build && npm run build:companion:bundle && PATH=\"$HOME/.cargo/bin:$PATH\" npx tauri build --config apps/desktop/src-tauri/tauri.conf.json --bundles app",
+    "build:desktop:x64": "npm run build && npm run build:companion:bundle && PATH=\"$HOME/.cargo/bin:$PATH\" npx tauri build --config apps/desktop/src-tauri/tauri.conf.json --target x86_64-apple-darwin --bundles app",
+    "build:desktop:arm64": "npm run build && npm run build:companion:bundle && PATH=\"$HOME/.cargo/bin:$PATH\" npx tauri build --config apps/desktop/src-tauri/tauri.conf.json --target aarch64-apple-darwin --bundles app",
+    "build:desktop:x64:bundled": "npm run build && npm run build:companion:bundle && PATH=\"$HOME/.cargo/bin:$PATH\" npx tauri build --config apps/desktop/src-tauri/tauri.conf.json --config apps/desktop/src-tauri/tauri.bundled-runtime.conf.json --target x86_64-apple-darwin --bundles app",
+    "build:desktop:arm64:bundled": "npm run build && npm run build:companion:bundle && PATH=\"$HOME/.cargo/bin:$PATH\" npx tauri build --config apps/desktop/src-tauri/tauri.conf.json --config apps/desktop/src-tauri/tauri.bundled-runtime.conf.json --target aarch64-apple-darwin --bundles app",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint packages apps/companion apps/web",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@tauri-apps/cli": "^2.12.6",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.13",
+    "@types/node": "^22.10.0",
+    "eslint": "^9.16.0",
+    "jsdom": "^31.0.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vitest": "^4.1.12"
+  }
+}
